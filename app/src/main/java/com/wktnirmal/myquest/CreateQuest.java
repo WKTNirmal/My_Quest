@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -27,19 +28,21 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.io.IOException;
 import java.util.List;
 
-//Contains get data from the user, calculate the distance and insert the data to the database
+
 public class CreateQuest extends AppCompatActivity implements OnMapReadyCallback {
 
     GoogleMap inputMap;
     Button submitNewQuestButton;
     EditText questTitleInput, questLocationInput, questDescriptionInput;
-    DatabaseHelper questData;
+    Switch repetitiveQuestSwitch;
+    DatabaseHelper questData; // database instance
     //get the location lat and lng
     double startLat = 6.93260339209919;
     double startLng = 79.84594898435564;
     public double endLat ;
     public double endLng ;
     public int distance;
+    public String repetitive;
     List<Address> addressList;
 
     @Override
@@ -62,6 +65,8 @@ public class CreateQuest extends AppCompatActivity implements OnMapReadyCallback
         questTitleInput = findViewById(R.id.questTitleInput);
         questLocationInput = findViewById(R.id.questLocationInput);
         questDescriptionInput = findViewById(R.id.questDescriptionInput);
+        repetitiveQuestSwitch = findViewById(R.id.switch_repititive);
+
 
         //connect to the database
         questData = new DatabaseHelper(this);
@@ -70,8 +75,10 @@ public class CreateQuest extends AppCompatActivity implements OnMapReadyCallback
 
         updateLocation();
 
-
         submitNewQuest();
+
+
+
     }
 
 
@@ -86,7 +93,7 @@ public class CreateQuest extends AppCompatActivity implements OnMapReadyCallback
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
                     getLocationData();
-                }else {}
+                }
             }
         });
     }
@@ -130,7 +137,7 @@ public class CreateQuest extends AppCompatActivity implements OnMapReadyCallback
     }
 
 
-    //method for get endLat and endLng from the user input location
+    //method for get endLat and endLng from the user input location and show it on the mini map
     public void getLocationData(){
         String userInputLocation = questLocationInput.getText().toString().trim();
         Geocoder geocoder = new Geocoder(CreateQuest.this);
@@ -168,12 +175,18 @@ public class CreateQuest extends AppCompatActivity implements OnMapReadyCallback
 
     //method for insert data to the database
     public void addData (){
-        boolean isInserted = questData.insertData(questTitleInput.getText().toString(),questDescriptionInput.getText().toString(),startLat,startLng,endLat,endLng,distance,"1");
-        if (isInserted == true){
-            Toast.makeText(this, "Quest created", Toast.LENGTH_SHORT).show();
-        }else{
-            Toast.makeText(this, "something went wrong", Toast.LENGTH_SHORT).show();
+        if (questTitleInput != null && endLat != 0.0 && endLng != 0.0){
+            if (repetitiveQuestSwitch.isChecked()){
+                repetitive = "1";
+            }
+            boolean isInserted = questData.insertData(questTitleInput.getText().toString(),questDescriptionInput.getText().toString(),startLat,startLng,endLat,endLng,distance,"1",repetitive );
+            if (isInserted == true){
+                Toast.makeText(this, "Quest created", Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(this, "something went wrong", Toast.LENGTH_SHORT).show();
+            }
         }
+
     }
 
     //method for calculate the straight line distance and assign it to the "distance" variable

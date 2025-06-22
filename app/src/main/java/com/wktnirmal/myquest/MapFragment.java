@@ -1,5 +1,6 @@
 package com.wktnirmal.myquest;
 
+import android.database.Cursor;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -22,6 +23,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
  * create an instance of this fragment.
  */
 public class MapFragment extends Fragment implements OnMapReadyCallback {
+
+    DatabaseHelper questData; //database instance (getContext because of the fragment)
+
 
 
 
@@ -63,6 +67,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        //initialize the database
+        questData = new DatabaseHelper(getContext());
     }
 
     @Override
@@ -83,9 +90,31 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         GoogleMap gameMap = googleMap;
+
+        //get the locations from the database
+        Cursor cursor = questData.getQuestLocations();
+
+        //add the location markers to the map
+        if (cursor != null && cursor.moveToFirst()){
+            do {
+
+                String questTitle = cursor.getString(0);
+                double endLat = cursor.getDouble(1);
+                double endLng = cursor.getDouble(2);
+
+                LatLng questLocation = new LatLng(endLat, endLng);
+                gameMap.addMarker(new MarkerOptions().position(questLocation).title(questTitle));
+
+            }while (cursor.moveToNext());
+            cursor.close();
+
+        }
+
+
+        //this is a testing marker
         LatLng testingColombo = new LatLng(6.936769895547724, 79.8337259436081);
         gameMap.addMarker(new MarkerOptions().position(testingColombo).title("Colombo PortCity"));
-        gameMap.moveCamera(CameraUpdateFactory.newLatLngZoom(testingColombo,15.0f));
+        gameMap.moveCamera(CameraUpdateFactory.newLatLngZoom(testingColombo,10.0f));
         gameMap.getUiSettings().setZoomControlsEnabled(true);
         
     }

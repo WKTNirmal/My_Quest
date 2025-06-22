@@ -57,6 +57,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="200dp" />
 
+            <Switch
+                android:id="@+id/switch_repititive"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Repititive Quest" />
+
             <TextView
                 android:id="@+id/textView4"
                 android:layout_width="match_parent"

@@ -26,7 +26,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:padding="10dp"
-                tools:src="@tools:sample/avatars" />
+                tools:src="@drawable/baseline_person_24" />
 
             <TextView
                 android:id="@+id/username"
