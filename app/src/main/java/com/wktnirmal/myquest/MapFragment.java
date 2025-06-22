@@ -104,18 +104,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
                 LatLng questLocation = new LatLng(endLat, endLng);
                 gameMap.addMarker(new MarkerOptions().position(questLocation).title(questTitle));
+                gameMap.moveCamera(CameraUpdateFactory.newLatLngZoom(questLocation,15.0f));
+                gameMap.getUiSettings().setZoomControlsEnabled(true);
 
             }while (cursor.moveToNext());
-            cursor.close();
 
+            cursor.close();
         }
 
 
-        //this is a testing marker
-        LatLng testingColombo = new LatLng(6.936769895547724, 79.8337259436081);
-        gameMap.addMarker(new MarkerOptions().position(testingColombo).title("Colombo PortCity"));
-        gameMap.moveCamera(CameraUpdateFactory.newLatLngZoom(testingColombo,10.0f));
-        gameMap.getUiSettings().setZoomControlsEnabled(true);
+//        //this is a testing marker
+//        LatLng testingColombo = new LatLng(6.936769895547724, 79.8337259436081);
+//        gameMap.addMarker(new MarkerOptions().position(testingColombo).title("Colombo PortCity"));
+//        gameMap.moveCamera(CameraUpdateFactory.newLatLngZoom(testingColombo,10.0f));
+//        gameMap.getUiSettings().setZoomControlsEnabled(true);
         
     }
 }
