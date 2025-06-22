@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/questLogFragment"
+        android:icon="@drawable/baseline_quest_log_24"
+        android:title="@string/quest_log_title" />
+    <item
+        android:id="@+id/mapFragment"
+        android:icon="@drawable/baseline_map_24"
+        android:title="@string/map_title" />
+    <item
+        android:id="@+id/leaderboardFragment"
+        android:icon="@drawable/baseline_leaderboard_24"
+        android:title="@string/leaderboard_title" />
+    <item
+        android:id="@+id/settingFragment"
+        android:icon="@drawable/baseline_settings_24"
+        android:title="@string/settings_title" />
+</menu>

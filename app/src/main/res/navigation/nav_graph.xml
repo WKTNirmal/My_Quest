@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/questLogFragment">
+
+    <fragment
+        android:id="@+id/questLogFragment"
+        android:name="com.wktnirmal.myquest.QuestLogFragment"
+        android:label="fragment_quest_log"
+        tools:layout="@layout/fragment_quest_log" />
+    <fragment
+        android:id="@+id/leaderboardFragment"
+        android:name="com.wktnirmal.myquest.LeaderboardFragment"
+        android:label="fragment_leaderboard"
+        tools:layout="@layout/fragment_leaderboard" />
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="com.wktnirmal.myquest.SettingFragment"
+        android:label="fragment_setting"
+        tools:layout="@layout/fragment_setting" />
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="com.wktnirmal.myquest.MapFragment"
+        android:label="fragment_map"
+        tools:layout="@layout/fragment_map" />
+</navigation>
