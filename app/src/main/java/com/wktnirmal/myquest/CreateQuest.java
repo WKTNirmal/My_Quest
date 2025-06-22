@@ -27,6 +27,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.io.IOException;
 import java.util.List;
 
+//Contains get data from the user, calculate the distance and insert the data to the database
 public class CreateQuest extends AppCompatActivity implements OnMapReadyCallback {
 
     GoogleMap inputMap;
@@ -78,7 +79,7 @@ public class CreateQuest extends AppCompatActivity implements OnMapReadyCallback
 
 
 
-    //OnFocusChange to update user input location and the Map
+    //OnFocusChange to update user input location and the Map.
     public void updateLocation() {
         questLocationInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
