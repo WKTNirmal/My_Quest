@@ -1,4 +1,4 @@
-package com.wktnirmal.myquest;
+package com.wktnirmal.myquest.QuestLog;
 
 import android.content.ContentValues;
 import android.content.Context;

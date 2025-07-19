@@ -1,4 +1,4 @@
-package com.wktnirmal.myquest;
+package com.wktnirmal.myquest.Settings;
 
 import android.os.Bundle;
 
@@ -8,14 +8,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.wktnirmal.myquest.R;
 
-public class LeaderboardFragment extends Fragment {
+public class SettingFragment extends Fragment {
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_leaderboard, container, false);
+        return inflater.inflate(R.layout.fragment_setting, container, false);
     }
 }

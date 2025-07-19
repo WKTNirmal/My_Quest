@@ -32,7 +32,7 @@
             android:value="@string/API_Key" />
 
         <activity
-            android:name=".CreateQuest"
+            android:name=".QuestLog.CreateQuest"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

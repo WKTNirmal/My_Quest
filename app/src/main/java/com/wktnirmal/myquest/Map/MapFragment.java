@@ -1,4 +1,4 @@
-package com.wktnirmal.myquest;
+package com.wktnirmal.myquest.Map;
 
 import android.database.Cursor;
 import android.os.Bundle;
@@ -16,6 +16,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.wktnirmal.myquest.QuestLog.DatabaseHelper;
+import com.wktnirmal.myquest.R;
 
 /**
  * A simple {@link Fragment} subclass.

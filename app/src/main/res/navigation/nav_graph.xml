@@ -7,22 +7,22 @@
 
     <fragment
         android:id="@+id/questLogFragment"
-        android:name="com.wktnirmal.myquest.QuestLogFragment"
+        android:name="com.wktnirmal.myquest.QuestLog.QuestLogFragment"
         android:label="fragment_quest_log"
         tools:layout="@layout/fragment_quest_log" />
     <fragment
         android:id="@+id/leaderboardFragment"
-        android:name="com.wktnirmal.myquest.LeaderboardFragment"
+        android:name="com.wktnirmal.myquest.Leaderboard.LeaderboardFragment"
         android:label="fragment_leaderboard"
         tools:layout="@layout/fragment_leaderboard" />
     <fragment
         android:id="@+id/settingFragment"
-        android:name="com.wktnirmal.myquest.SettingFragment"
+        android:name="com.wktnirmal.myquest.Settings.SettingFragment"
         android:label="fragment_setting"
         tools:layout="@layout/fragment_setting" />
     <fragment
         android:id="@+id/mapFragment"
-        android:name="com.wktnirmal.myquest.MapFragment"
+        android:name="com.wktnirmal.myquest.Map.MapFragment"
         android:label="fragment_map"
         tools:layout="@layout/fragment_map" />
 </navigation>
