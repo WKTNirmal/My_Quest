@@ -5,6 +5,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,27 +25,36 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.wktnirmal.myquest.MainActivity;
+import com.wktnirmal.myquest.Quest;
 import com.wktnirmal.myquest.R;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-
+// TODO add a way to get the users current location and assign to the variables
 public class CreateQuest extends AppCompatActivity implements OnMapReadyCallback {
+
+    FirebaseFirestore databaseQuests = FirebaseFirestore.getInstance();  //firestore initialization
 
     GoogleMap inputMap;
     Button submitNewQuestButton;
     EditText questTitleInput, questLocationInput, questDescriptionInput;
     Switch repetitiveQuestSwitch;
-    DatabaseHelper questData; // database instance
+//    DatabaseHelper questData; // database instance
     //get the location lat and lng
     double startLat = 6.93260339209919;
     double startLng = 79.84594898435564;
     public double endLat ;
     public double endLng ;
     public int distance;
-    public String repetitive;
+    public String repetitive = "0";
     List<Address> addressList;
 
     @Override
@@ -69,21 +79,11 @@ public class CreateQuest extends AppCompatActivity implements OnMapReadyCallback
         questDescriptionInput = findViewById(R.id.questDescriptionInput);
         repetitiveQuestSwitch = findViewById(R.id.switch_repititive);
 
-
-        //connect to the database
-        questData = new DatabaseHelper(this);
-
-
-
         updateLocation();
 
         submitNewQuest();
 
-
-
     }
-
-
 
 
 
@@ -112,10 +112,8 @@ public class CreateQuest extends AppCompatActivity implements OnMapReadyCallback
                 //assign the distance in meters to the variable
                 calculateDistance();
 
-
-                //insert all the data to the database
-                addData();
-
+                //insert the data to the firebase
+                addDataToFirebase();
 
                 //navigate back to the quest log
                 Intent intent = new Intent(CreateQuest.this, MainActivity.class);
@@ -175,20 +173,45 @@ public class CreateQuest extends AppCompatActivity implements OnMapReadyCallback
         }
     }
 
-    //method for insert data to the database
-    public void addData (){
-        if (questTitleInput != null && endLat != 0.0 && endLng != 0.0){
-            if (repetitiveQuestSwitch.isChecked()){
+    //method for insert data to the SQLite database
+//    public void addData (){
+//        if (questTitleInput != null && endLat != 0.0 && endLng != 0.0){
+//            if (repetitiveQuestSwitch.isChecked()){
+//                repetitive = "1";
+//            }
+//            boolean isInserted = questData.insertData(questTitleInput.getText().toString(),questDescriptionInput.getText().toString(),startLat,startLng,endLat,endLng,distance,"1",repetitive );
+//            if (isInserted == true){
+//                Toast.makeText(this, "Quest created", Toast.LENGTH_SHORT).show();
+//            }else{
+//                Toast.makeText(this, "something went wrong", Toast.LENGTH_SHORT).show();
+//            }
+//        }
+//
+//    }
+
+    public void addDataToFirebase(){
+        if (questTitleInput != null && endLat != 0.0 && endLng != 0.0) {
+            if (repetitiveQuestSwitch.isChecked()) {
                 repetitive = "1";
             }
-            boolean isInserted = questData.insertData(questTitleInput.getText().toString(),questDescriptionInput.getText().toString(),startLat,startLng,endLat,endLng,distance,"1",repetitive );
-            if (isInserted == true){
-                Toast.makeText(this, "Quest created", Toast.LENGTH_SHORT).show();
-            }else{
-                Toast.makeText(this, "something went wrong", Toast.LENGTH_SHORT).show();
-            }
-        }
 
+            Quest newquest = new Quest(questTitleInput.getText().toString(), questDescriptionInput.getText().toString(), startLat, startLng, endLat, endLng, distance, "1", repetitive);
+            Map<String, Object> Quest = new HashMap<>();
+
+            databaseQuests.collection("Quests").add(newquest)
+                    .addOnSuccessListener(docRef -> {
+                        String questId = docRef.getId(); // Get the generated document ID
+                        databaseQuests.collection("Quests").document(questId).update("id", questId);
+                    })
+                    .addOnSuccessListener(aVoid -> Log.d("Firestore", "Quest added successfully"))
+                    .addOnFailureListener(e -> Log.w("Firestore", "Error adding quest", e));
+
+//            databaseQuests.collection("Quests").add(newquest)
+//                    .addOnSuccessListener(docRef -> {
+//                        String questId = docRef.getId();
+//                        databaseQuests.collection("quests").document(questId).update("id", questId);
+//                    });
+        }
     }
 
     //method for calculate the straight line distance and assign it to the "distance" variable

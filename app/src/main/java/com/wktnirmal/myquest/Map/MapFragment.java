@@ -1,11 +1,11 @@
 package com.wktnirmal.myquest.Map;
 
-import android.database.Cursor;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +16,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.wktnirmal.myquest.QuestLog.DatabaseHelper;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.wktnirmal.myquest.R;
 
 /**
@@ -26,8 +27,8 @@ import com.wktnirmal.myquest.R;
  */
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
-    DatabaseHelper questData; //database instance (getContext because of the fragment)
 
+    FirebaseFirestore databaseQuests = FirebaseFirestore.getInstance();  //firestore initialization
 
 
 
@@ -69,9 +70,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
-        //initialize the database
-        questData = new DatabaseHelper(getContext());
     }
 
     @Override
@@ -93,26 +91,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(@NonNull GoogleMap googleMap) {
         GoogleMap gameMap = googleMap;
 
-        //get the locations from the database
-        Cursor cursor = questData.getQuestLocations();
-
-        //add the location markers to the map
-        if (cursor != null && cursor.moveToFirst()){
-            do {
-
-                String questTitle = cursor.getString(0);
-                double endLat = cursor.getDouble(1);
-                double endLng = cursor.getDouble(2);
-
-                LatLng questLocation = new LatLng(endLat, endLng);
-                gameMap.addMarker(new MarkerOptions().position(questLocation).title(questTitle));
-                gameMap.moveCamera(CameraUpdateFactory.newLatLngZoom(questLocation,15.0f));
-                gameMap.getUiSettings().setZoomControlsEnabled(true);
-
-            }while (cursor.moveToNext());
-
-            cursor.close();
-        }
+        addMarkersOnMap(gameMap);
 
 
 //        //this is a testing marker
@@ -121,5 +100,27 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 //        gameMap.moveCamera(CameraUpdateFactory.newLatLngZoom(testingColombo,10.0f));
 //        gameMap.getUiSettings().setZoomControlsEnabled(true);
         
+    }
+
+    //add the location markers to the map
+    private void addMarkersOnMap(GoogleMap gameMap) {
+        databaseQuests.collection("Quests")
+                .whereEqualTo("questStatus", "1")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (DocumentSnapshot doc: queryDocumentSnapshots.getDocuments()){
+                        double endLat = doc.getDouble("endLat");
+                        double endLng = doc.getDouble("endLng");
+                        String questTitle = doc.getString("questTitle");
+
+                        LatLng questLocation = new LatLng(endLat, endLng);
+                        gameMap.addMarker(new MarkerOptions().position(questLocation).title(questTitle));
+                        gameMap.animateCamera(CameraUpdateFactory.newLatLngZoom(questLocation,15.0f));
+                        gameMap.getUiSettings().setZoomControlsEnabled(true);
+
+                    }
+                    Log.d("Firestore", "Markers added" );
+                })
+                .addOnFailureListener(e -> Log.w("Firestore", "Error adding markers", e));
     }
 }
