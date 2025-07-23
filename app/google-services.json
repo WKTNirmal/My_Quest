@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "787305040647",
+    "project_id": "myquest-6af8d",
+    "storage_bucket": "myquest-6af8d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:787305040647:android:7c00e94f719ecbd8da93a2",
+        "android_client_info": {
+          "package_name": "com.wktnirmal.myquest"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtzYO9U_AVLJkuKQDMb_4ATmWiJIEjdM4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
