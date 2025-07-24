@@ -5,65 +5,65 @@ import com.google.firebase.database.IgnoreExtraProperties;
 @IgnoreExtraProperties
 public class Quest {
     private String id;
-    private String QuestTitle;
-    private String QuestDescription;
-    private double StartLat;
-    private double StartLng;
-    private double EndLat;
-    private double EndLng;
-    private int Distance;
-    private String QuestStatus;
-    private String Repetitive;
+    private String questTitle;
+    private String questDescription;
+    private double startLat;
+    private double startLng;
+    private double endLat;
+    private double endLng;
+    private int distance;
+    private String questStatus;
+    private String repetitive;
 
     public Quest() {} //needed for Firebase
-    public Quest(String questTitle, String questDescription, double startLat, double startLng, double endLat, double endLng, int distance, String questStatus, String repetitive) {
+    public Quest(String QuestTitle, String QuestDescription, double StartLat, double StartLng, double EndLat, double EndLng, int Distance, String QuestStatus, String Repetitive) {
         //id = id;
-        QuestTitle = questTitle;
-        QuestDescription = questDescription;
-        StartLat = startLat;
-        StartLng = startLng;
-        EndLat = endLat;
-        EndLng = endLng;
-        Distance = distance;
-        QuestStatus = questStatus;
-        Repetitive = repetitive;
+        questTitle = QuestTitle;
+        questDescription = QuestDescription;
+        startLat = StartLat;
+        startLng = StartLng;
+        endLat = EndLat;
+        endLng = EndLng;
+        distance = Distance;
+        questStatus = QuestStatus;
+        repetitive = Repetitive;
     }
 
 
     public String getRepetitive() {
-        return Repetitive;
+        return repetitive;
     }
 
     public String getQuestStatus() {
-        return QuestStatus;
+        return questStatus;
     }
 
     public int getDistance() {
-        return Distance;
+        return distance;
     }
 
     public double getEndLng() {
-        return EndLng;
+        return endLng;
     }
 
     public double getEndLat() {
-        return EndLat;
+        return endLat;
     }
 
     public double getStartLng() {
-        return StartLng;
+        return startLng;
     }
 
     public double getStartLat() {
-        return StartLat;
+        return startLat;
     }
 
     public String getQuestDescription() {
-        return QuestDescription;
+        return questDescription;
     }
 
     public String getQuestTitle() {
-        return QuestTitle;
+        return questTitle;
     }
 
     public String getId() {

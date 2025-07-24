@@ -47,7 +47,7 @@ public class CreateQuest extends AppCompatActivity implements OnMapReadyCallback
     Button submitNewQuestButton;
     EditText questTitleInput, questLocationInput, questDescriptionInput;
     Switch repetitiveQuestSwitch;
-//    DatabaseHelper questData; // database instance
+    //    DatabaseHelper questData; // database instance
     //get the location lat and lng
     double startLat = 6.93260339209919;
     double startLng = 79.84594898435564;
@@ -159,7 +159,7 @@ public class CreateQuest extends AppCompatActivity implements OnMapReadyCallback
                 //create a marker on the map
                 inputMap.clear(); // Clear previous markers
                 inputMap.addMarker(new MarkerOptions().position(latLngLocation).title(userInputLocation));
-                inputMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngLocation, 15.0f));
+                inputMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLngLocation, 15.0f));
             } else {
                 // Handle the case where no address is found
                 Toast.makeText(CreateQuest.this, "Address not found", Toast.LENGTH_SHORT).show();
