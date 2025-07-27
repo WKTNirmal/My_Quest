@@ -1,10 +1,14 @@
 package com.wktnirmal.myquest.QuestLog;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -15,14 +19,19 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DatabaseReference;
@@ -38,7 +47,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-// TODO add a way to get the users current location and assign to the variables
+
 public class CreateQuest extends AppCompatActivity implements OnMapReadyCallback {
 
     FirebaseFirestore databaseQuests = FirebaseFirestore.getInstance();  //firestore initialization
@@ -47,15 +56,16 @@ public class CreateQuest extends AppCompatActivity implements OnMapReadyCallback
     Button submitNewQuestButton;
     EditText questTitleInput, questLocationInput, questDescriptionInput;
     Switch repetitiveQuestSwitch;
-    //    DatabaseHelper questData; // database instance
-    //get the location lat and lng
-    double startLat = 6.93260339209919;
-    double startLng = 79.84594898435564;
-    public double endLat ;
-    public double endLng ;
-    public int distance;
-    public String repetitive = "0";
+    double startLat;
+    double startLng;
+    double endLat ;
+    double endLng ;
+    int distance;
+    String repetitive = "0";
     List<Address> addressList;
+    FusedLocationProviderClient fusedLocationClient;
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +89,10 @@ public class CreateQuest extends AppCompatActivity implements OnMapReadyCallback
         questDescriptionInput = findViewById(R.id.questDescriptionInput);
         repetitiveQuestSwitch = findViewById(R.id.switch_repititive);
 
-        updateLocation();
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+
+        updateLocationOnMinimap();
 
         submitNewQuest();
 
@@ -89,7 +102,7 @@ public class CreateQuest extends AppCompatActivity implements OnMapReadyCallback
 
 
     //OnFocusChange to update user input location and the Map.
-    public void updateLocation() {
+    public void updateLocationOnMinimap() {
         questLocationInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -106,38 +119,48 @@ public class CreateQuest extends AppCompatActivity implements OnMapReadyCallback
         submitNewQuestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //process the user input location and assign end lat,lng variables
-                getLocationData();
+                if (!questTitleInput.equals("") && endLat != 0.0 && endLng != 0.0) {
+                    //process the user input location and assign end lat,lng variables
+                    getLocationData();
 
-                //assign the distance in meters to the variable
-                calculateDistance();
+                    //assign the distance in meters to the variable
+                    calculateDistance();
 
-                //insert the data to the firebase
-                addDataToFirebase();
+                    //assign user's current lat, lang
+                    getUserLiveLocation();
 
-                //navigate back to the quest log
-                Intent intent = new Intent(CreateQuest.this, MainActivity.class);
-                startActivity(intent);
-                finish();
+                    //insert the data to the firebase
+                    addDataToFirebase();
+
+                    //navigate back to the quest log
+                    Intent intent = new Intent(CreateQuest.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }else{
+                    Toast.makeText(CreateQuest.this, "Please fill title and location", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
     }
 
 
+
+
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         inputMap = googleMap;
 
-        //Set an initial location and zoom level for the map
-        LatLng initialLocation = new LatLng(0, 0); // default map view
-        inputMap.moveCamera(CameraUpdateFactory.newLatLngZoom(initialLocation, 2.0f)); // Low zoom to show a large area
-        inputMap.getUiSettings().setZoomControlsEnabled(true);
+        getUserLiveLocation();
+
+        LatLng initialLocation = new LatLng(startLat, startLng);
+        inputMap.animateCamera(CameraUpdateFactory.newLatLngZoom(initialLocation, 15.0f)); // Low zoom to show a large area
+
 
     }
 
 
-    //method for get endLat and endLng from the user input location and show it on the mini map
+    //Gets endLat and endLng from the user input location and show it on the mini map & assign values
     public void getLocationData(){
         String userInputLocation = questLocationInput.getText().toString().trim();
         Geocoder geocoder = new Geocoder(CreateQuest.this);
@@ -156,8 +179,14 @@ public class CreateQuest extends AppCompatActivity implements OnMapReadyCallback
                 endLng = address.getLongitude();
 
 
-                //create a marker on the map
+
+
                 inputMap.clear(); // Clear previous markers
+
+                getUserLiveLocation();
+
+                //LatLng initialLocation = new LatLng(startLat, startLng); // live location map view
+//                inputMap.addMarker(new MarkerOptions().position(initialLocation).title("You").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
                 inputMap.addMarker(new MarkerOptions().position(latLngLocation).title(userInputLocation));
                 inputMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLngLocation, 15.0f));
             } else {
@@ -165,32 +194,63 @@ public class CreateQuest extends AppCompatActivity implements OnMapReadyCallback
                 Toast.makeText(CreateQuest.this, "Address not found", Toast.LENGTH_SHORT).show();
             }
         } catch (IOException e) { //catch exceptions
-            e.printStackTrace();
-            Toast.makeText(CreateQuest.this, "Check your network connection", Toast.LENGTH_SHORT).show();
+            if (!userInputLocation.equals("")) {
+                e.printStackTrace();
+                Toast.makeText(CreateQuest.this, "Check your network connection", Toast.LENGTH_SHORT).show();
+            }
         } catch (IllegalArgumentException e){
             e.printStackTrace();
             Toast.makeText(CreateQuest.this, "Invalid location", Toast.LENGTH_SHORT).show();
         }
     }
 
-    //method for insert data to the SQLite database
-//    public void addData (){
-//        if (questTitleInput != null && endLat != 0.0 && endLng != 0.0){
-//            if (repetitiveQuestSwitch.isChecked()){
-//                repetitive = "1";
-//            }
-//            boolean isInserted = questData.insertData(questTitleInput.getText().toString(),questDescriptionInput.getText().toString(),startLat,startLng,endLat,endLng,distance,"1",repetitive );
-//            if (isInserted == true){
-//                Toast.makeText(this, "Quest created", Toast.LENGTH_SHORT).show();
-//            }else{
-//                Toast.makeText(this, "something went wrong", Toast.LENGTH_SHORT).show();
-//            }
-//        }
-//
-//    }
+
+    //get user's current location and assign it to startLat and startLng variables
+    private void getUserLiveLocation() {
+        // Check for location permissions
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            // Permission is already granted, get the location
+            fusedLocationClient.getLastLocation()
+                    .addOnSuccessListener(location -> {
+                        if (location != null) {
+                            startLat = location.getLatitude();
+                            startLng = location.getLongitude();
+
+                            //Log.d("Location", "Lat: " + startLat + ", Lng: " + startLat);
+
+                            //Set an initial location and zoom level for the map
+                            LatLng initialLocation = new LatLng(startLat, startLng); // live location map view
+                            inputMap.addMarker(new MarkerOptions().position(initialLocation).title("You").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+
+                            if (endLat == 0.0 && endLng == 0.0) { //so the camera will only zoom at the live location only at first
+                                inputMap.animateCamera(CameraUpdateFactory.newLatLngZoom(initialLocation, 15.0f)); // Low zoom to show a large area
+                                inputMap.getUiSettings().setZoomControlsEnabled(true);
+                            }
+                        }
+                    });
+
+
+        } else {
+            // Permission is not granted, request it
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+        }
+    }
+
+    //method for calculate the straight line distance and assign it to the "distance" variable
+    public void calculateDistance(){
+        Location startLocation = new Location("start");
+        startLocation.setLatitude(startLat);
+        startLocation.setLongitude(startLng);
+
+        Location endLocation = new Location("end");
+        endLocation.setLatitude(endLat);
+        endLocation.setLongitude(endLng);
+
+        distance = (int) startLocation.distanceTo(endLocation); //returns the distance in meters as a float and converted to int
+    }
 
     public void addDataToFirebase(){
-        if (questTitleInput != null && endLat != 0.0 && endLng != 0.0) {
+        if (!questTitleInput.equals("") && endLat != 0.0 && endLng != 0.0) {
             if (repetitiveQuestSwitch.isChecked()) {
                 repetitive = "1";
             }
@@ -214,18 +274,8 @@ public class CreateQuest extends AppCompatActivity implements OnMapReadyCallback
         }
     }
 
-    //method for calculate the straight line distance and assign it to the "distance" variable
-    public void calculateDistance(){
-        Location startLocation = new Location("start");
-        startLocation.setLatitude(startLat);
-        startLocation.setLongitude(startLng);
 
-        Location endLocation = new Location("end");
-        endLocation.setLatitude(endLat);
-        endLocation.setLongitude(endLng);
 
-        distance = (int) startLocation.distanceTo(endLocation); //returns the distance in meters as a float and converted to int
-    }
 
 
 

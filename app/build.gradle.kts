@@ -54,6 +54,7 @@ dependencies {
     // since this library builds in the compatible version of the Maps SDK.
     implementation("com.google.maps.android:android-maps-utils:3.10.0")
 
-    implementation ("com.google.android.gms:play-services-location:21.2.0") // Use the latest version
-    implementation ("com.google.android.gms:play-services-maps:18.2.0")     // For Google Maps
+    implementation ("com.google.android.gms:play-services-location:21.3.0") // Use the latest version
+    implementation ("com.google.android.gms:play-services-maps:19.2.0")     // For Google Maps
+    implementation("com.google.android.gms:play-services-auth:21.4.0")
 }
