@@ -72,7 +72,7 @@ public class QuestLogFragment extends Fragment {
                                 questList.add(quest);
                             }
                         }
-                        QuestLogAdapter adapter = new QuestLogAdapter(questList);
+                        QuestLogAdapter adapter = new QuestLogAdapter(questList, getContext());
                         recyclerView.setAdapter(adapter);
                     });
 

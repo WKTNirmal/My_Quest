@@ -7,8 +7,6 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -34,9 +32,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.wktnirmal.myquest.MainActivity;
 import com.wktnirmal.myquest.Quest;
@@ -84,9 +79,9 @@ public class CreateQuest extends AppCompatActivity implements OnMapReadyCallback
 
         //connect button and text fields
         submitNewQuestButton = findViewById(R.id.btn_submitNewQuest);
-        questTitleInput = findViewById(R.id.questTitleInput);
+        questTitleInput = findViewById(R.id.questTitle);
         questLocationInput = findViewById(R.id.questLocationInput);
-        questDescriptionInput = findViewById(R.id.questDescriptionInput);
+        questDescriptionInput = findViewById(R.id.questDescriptionScrollView);
         repetitiveQuestSwitch = findViewById(R.id.switch_repititive);
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);

@@ -12,6 +12,7 @@ public class Quest {
     private double endLat;
     private double endLng;
     private int distance;
+    private int reward;
     private String questStatus;
     private String repetitive;
 
@@ -27,6 +28,7 @@ public class Quest {
         distance = Distance;
         questStatus = QuestStatus;
         repetitive = Repetitive;
+        reward = Distance/10;
     }
 
 
@@ -68,5 +70,9 @@ public class Quest {
 
     public String getId() {
         return id;
+    }
+
+    public int getReward() {
+        return reward;
     }
 }

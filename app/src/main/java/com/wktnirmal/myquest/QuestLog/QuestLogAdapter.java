@@ -1,5 +1,7 @@
 package com.wktnirmal.myquest.QuestLog;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +17,11 @@ import java.util.List;
 
 public class QuestLogAdapter extends RecyclerView.Adapter<QuestLogAdapter.QuestViewHolder>{
     private List<Quest> questList;
+    private Context context;
 
-    public QuestLogAdapter(List<Quest> questList) {
+    public QuestLogAdapter(List<Quest> questList, Context context) {
         this.questList = questList;
+        this.context = context;
     }
 
     @NonNull
@@ -31,8 +35,20 @@ public class QuestLogAdapter extends RecyclerView.Adapter<QuestLogAdapter.QuestV
     public void onBindViewHolder(@NonNull QuestViewHolder holder, int position) {
         Quest quest = questList.get(position);
         holder.title.setText(quest.getQuestTitle());
-        holder.distance.setText(String.valueOf(quest.getDistance() / 10));
+        holder.reward.setText(String.valueOf(quest.getReward()));
         holder.description.setText(quest.getQuestDescription());
+
+        //pass the data to the ViewQuest activity
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, ViewQuest.class);
+            intent.putExtra("questTitle", quest.getQuestTitle());
+            intent.putExtra("questReward", quest.getReward());
+            intent.putExtra("questDescription", quest.getQuestDescription());
+            intent.putExtra("questEndLat", quest.getEndLat());
+            intent.putExtra("questEndLng", quest.getEndLng());
+            intent.putExtra("questRepetitive", quest.getRepetitive());
+            context.startActivity(intent);
+        });
     }
 
     @Override
@@ -41,12 +57,12 @@ public class QuestLogAdapter extends RecyclerView.Adapter<QuestLogAdapter.QuestV
     }
 
     static class QuestViewHolder extends RecyclerView.ViewHolder {
-        TextView title, distance, description;
+        TextView title, reward, description;
 
         public QuestViewHolder(@NonNull View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.questTitleText);
-            distance = itemView.findViewById(R.id.questXpAmountText);
+            reward = itemView.findViewById(R.id.questXpAmountText);
             description = itemView.findViewById(R.id.descriptionText);
         }
     }

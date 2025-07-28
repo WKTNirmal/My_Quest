@@ -2,9 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/createQuestScreen"
+    android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".QuestLog.ViewQuest">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -22,37 +23,27 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textView2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="Quest Title"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/questTitle"
+                android:id="@+id/textView_questTitlePreview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="Title"
-                android:inputType="text" />
+                android:inputType="text"
+                android:padding="10dp"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/textView3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
-                android:text="Select location"
+                android:text="Location :"
                 android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/questLocationInput"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Place name, City" />
-
             <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/map_internal_fragment"
+                android:id="@+id/locationPreviewMapFragment"
                 android:name="com.google.android.gms.maps.SupportMapFragment"
                 android:layout_width="match_parent"
                 android:layout_height="200dp" />
@@ -69,30 +60,71 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
-                android:text="Quest data (optional)"
+                android:text="Additional data :"
                 android:textStyle="bold" />
 
-            <com.google.android.material.textfield.TextInputLayout
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:padding="10dp">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/questDescriptionScrollView"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Description"
-                    android:padding="10dp" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView_descriptionPreview"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="..." />
+                </LinearLayout>
+            </ScrollView>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/textView7"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Reward :"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textView_rewardPreview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="00"
+                    android:textColor="#FF9800"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textView9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="XP"
+                    android:textColor="#FF9800"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
 
             <Button
-                android:id="@+id/btn_submitNewQuest"
+                android:id="@+id/btn_completeQuest"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
-                android:onClick="CreateQuest"
                 android:padding="10dp"
-                android:text="Create" />
+                android:text="Complete" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
