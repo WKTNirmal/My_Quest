@@ -13,8 +13,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.wktnirmal.myquest.Quest;
@@ -30,6 +32,13 @@ public class QuestLogFragment extends Fragment {
     FirebaseFirestore databaseQuests = FirebaseFirestore.getInstance();  //firestore initialization
     List<Quest> questList = new ArrayList<>();
     ProgressBar progressBar;
+    FirebaseAuth fAuth;
+    TextView username;
+    TextView levelCount;
+    TextView xpCount;
+    int Xp = 0;
+    int userLevel = 0;
+    String UN;
 
 
     @Override
@@ -55,12 +64,18 @@ public class QuestLogFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Initialize ProgressBar
+        //firebase connect
+        fAuth = FirebaseAuth.getInstance();
+
+        //connect the elements
         progressBar = view.findViewById(R.id.progressBar_questLog);
         progressBar.setVisibility(View.VISIBLE);
-
-        // Initialize RecyclerView
         recyclerView = view.findViewById(R.id.questListRecyclerView);
+        username = view.findViewById(R.id.username);
+        levelCount = view.findViewById(R.id.levelCount);
+        xpCount = view.findViewById(R.id.xpCount);
+
+
 
         //clear the quest list everytime the fragment is created
         questList.clear();
@@ -69,7 +84,7 @@ public class QuestLogFragment extends Fragment {
         if (recyclerView != null) {
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             // Fetch from Firestore
-            databaseQuests.collection("Quests").whereEqualTo("questStatus", "1")
+            databaseQuests.collection("users").document(fAuth.getCurrentUser().getUid()).collection("Quests").whereEqualTo("questStatus", "1")
                     .get()
                     .addOnSuccessListener(queryDocumentSnapshots -> {
                         progressBar.setVisibility(View.GONE);
@@ -82,6 +97,22 @@ public class QuestLogFragment extends Fragment {
                         QuestLogAdapter adapter = new QuestLogAdapter(questList, getContext());
                         recyclerView.setAdapter(adapter);
                     });
+            //update username, level and xp from the database
+            databaseQuests.collection("users").document(fAuth.getCurrentUser().getUid())
+                    .get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        if (queryDocumentSnapshots != null) {
+                            UN = queryDocumentSnapshots.getString("username");
+                            userLevel = Math.toIntExact(queryDocumentSnapshots.getLong("userXpAmount"));
+                            Xp = Math.toIntExact(queryDocumentSnapshots.getLong("userXpAmount"));
+                        }
+                        //update the UI
+                        username.setText(UN);
+                        levelCount.setText(String.valueOf(userLevel));
+                        xpCount.setText(String.valueOf(Xp));
+                    });
+
+
 
             // Example:
             // QuestAdapter adapter = new QuestAdapter(questList);

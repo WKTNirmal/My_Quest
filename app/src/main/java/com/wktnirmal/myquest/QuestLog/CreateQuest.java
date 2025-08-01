@@ -32,6 +32,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.wktnirmal.myquest.MainActivity;
 import com.wktnirmal.myquest.Quest;
@@ -60,6 +61,7 @@ public class CreateQuest extends AppCompatActivity implements OnMapReadyCallback
     List<Address> addressList;
     FusedLocationProviderClient fusedLocationClient;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+    FirebaseAuth fAuth;
 
 
     @Override
@@ -85,6 +87,9 @@ public class CreateQuest extends AppCompatActivity implements OnMapReadyCallback
         repetitiveQuestSwitch = findViewById(R.id.switch_repititive);
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+        //firebase connect
+        fAuth = FirebaseAuth.getInstance();
 
 
         updateLocationOnMinimap();
@@ -127,10 +132,10 @@ public class CreateQuest extends AppCompatActivity implements OnMapReadyCallback
                     //insert the data to the firebase
                     addDataToFirebase();
 
-                    //navigate back to the quest log
-                    Intent intent = new Intent(CreateQuest.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
+//                    //navigate back to the quest log
+//                    Intent intent = new Intent(CreateQuest.this, MainActivity.class);
+//                    startActivity(intent);
+//                    finish();
                 }else{
                     Toast.makeText(CreateQuest.this, "Please fill title and location", Toast.LENGTH_SHORT).show();
                 }
@@ -253,10 +258,15 @@ public class CreateQuest extends AppCompatActivity implements OnMapReadyCallback
             Quest newquest = new Quest(questTitleInput.getText().toString(), questDescriptionInput.getText().toString(), startLat, startLng, endLat, endLng, distance, "1", repetitive);
             Map<String, Object> Quest = new HashMap<>();
 
-            databaseQuests.collection("Quests").add(newquest)
+            databaseQuests.collection("users").document(fAuth.getCurrentUser().getUid()).collection("Quests").add(newquest)
                     .addOnSuccessListener(docRef -> {
                         String questId = docRef.getId(); // Get the generated document ID
                         databaseQuests.collection("Quests").document(questId).update("id", questId);
+
+                        //navigate back to the quest log
+                        Intent intent = new Intent(CreateQuest.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
                     })
                     .addOnSuccessListener(aVoid -> Log.d("Firestore", "Quest added successfully"))
                     .addOnFailureListener(e -> Log.w("Firestore", "Error adding quest", e));

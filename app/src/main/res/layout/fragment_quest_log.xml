@@ -51,11 +51,21 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/levelCount"
+                android:id="@+id/levelCount2"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="LEVEL 0"
+                android:text="LEVEL "
+                android:textAlignment="textEnd"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/levelCount"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="0"
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="16sp"
@@ -66,7 +76,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="00000 XP"
+                android:text="00000"
+                android:textAlignment="textEnd"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/xpCount2"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text=" XP"
                 android:textAlignment="textEnd"
                 android:textColor="@color/white"
                 android:textSize="16sp"

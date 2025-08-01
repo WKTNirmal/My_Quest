@@ -27,6 +27,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText loginEmail;
     EditText loginPassword ;
     ProgressBar progressBar;
+    boolean accountJustRegistered = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,15 +46,24 @@ public class LoginActivity extends AppCompatActivity {
         loginEmail = findViewById(R.id.input_regEmail);
         loginPassword = findViewById(R.id.input_password);
         progressBar = findViewById(R.id.progressBar_login);
+        //check if the user just registered
+        accountJustRegistered = getIntent().getBooleanExtra("Account_Just_Registered", false);
 
         //firebase connect
         fAuth = FirebaseAuth.getInstance();
 
-        //check if user is already logged in
-        if(fAuth.getCurrentUser() != null) {
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish();
+
+        if (accountJustRegistered == true){
+            Toast.makeText(LoginActivity.this, "Account created successfully. Please Log in", Toast.LENGTH_SHORT).show();
+        } else {
+            //check if user is already logged in
+            if(fAuth.getCurrentUser() != null) {
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+                return;
+            }
+
         }
 
         loginUser();
