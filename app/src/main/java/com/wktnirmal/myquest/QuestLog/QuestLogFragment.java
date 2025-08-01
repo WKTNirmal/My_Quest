@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -28,6 +29,7 @@ public class QuestLogFragment extends Fragment {
     private RecyclerView recyclerView; // Declare RecyclerView
     FirebaseFirestore databaseQuests = FirebaseFirestore.getInstance();  //firestore initialization
     List<Quest> questList = new ArrayList<>();
+    ProgressBar progressBar;
 
 
     @Override
@@ -53,6 +55,10 @@ public class QuestLogFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Initialize ProgressBar
+        progressBar = view.findViewById(R.id.progressBar_questLog);
+        progressBar.setVisibility(View.VISIBLE);
+
         // Initialize RecyclerView
         recyclerView = view.findViewById(R.id.questListRecyclerView);
 
@@ -66,6 +72,7 @@ public class QuestLogFragment extends Fragment {
             databaseQuests.collection("Quests").whereEqualTo("questStatus", "1")
                     .get()
                     .addOnSuccessListener(queryDocumentSnapshots -> {
+                        progressBar.setVisibility(View.GONE);
                         for (DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()) {
                             Quest quest = doc.toObject(Quest.class);
                             if (quest != null) {

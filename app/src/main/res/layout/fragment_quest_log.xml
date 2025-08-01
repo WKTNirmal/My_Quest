@@ -75,17 +75,6 @@
 
     </androidx.cardview.widget.CardView>
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="This is the list of quests"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Topbar" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/questListRecyclerView"
         android:layout_width="0dp"
@@ -108,5 +97,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Topbar"
         app:layout_constraintVertical_bias="0.908" />
+
+    <ProgressBar
+        android:id="@+id/progressBar_questLog"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="95dp"
+        android:layout_height="82dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/questListRecyclerView"
+        app:layout_constraintStart_toStartOf="@+id/questListRecyclerView"
+        app:layout_constraintTop_toTopOf="@+id/questListRecyclerView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

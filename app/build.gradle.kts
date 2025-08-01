@@ -46,6 +46,10 @@ dependencies {
     implementation(libs.navigation.ui)
     implementation(libs.firebase.database)
     implementation(libs.firebase.firestore)
+    implementation(libs.firebase.auth)
+    implementation(libs.credentials)
+    implementation(libs.credentials.play.services.auth)
+    implementation(libs.googleid)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -57,4 +61,6 @@ dependencies {
     implementation ("com.google.android.gms:play-services-location:21.3.0") // Use the latest version
     implementation ("com.google.android.gms:play-services-maps:19.2.0")     // For Google Maps
     implementation("com.google.android.gms:play-services-auth:21.4.0")
+
+
 }
