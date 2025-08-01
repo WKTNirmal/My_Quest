@@ -261,7 +261,7 @@ public class CreateQuest extends AppCompatActivity implements OnMapReadyCallback
             databaseQuests.collection("users").document(fAuth.getCurrentUser().getUid()).collection("Quests").add(newquest)
                     .addOnSuccessListener(docRef -> {
                         String questId = docRef.getId(); // Get the generated document ID
-                        databaseQuests.collection("Quests").document(questId).update("id", questId);
+                        databaseQuests.collection("users").document(fAuth.getCurrentUser().getUid()).collection("Quests").document(questId).update("id", questId);
 
                         //navigate back to the quest log
                         Intent intent = new Intent(CreateQuest.this, MainActivity.class);
