@@ -41,6 +41,7 @@ public class QuestLogAdapter extends RecyclerView.Adapter<QuestLogAdapter.QuestV
         //pass the data to the ViewQuest activity
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, ViewQuest.class);
+            intent.putExtra("questID", quest.getId());
             intent.putExtra("questTitle", quest.getQuestTitle());
             intent.putExtra("questReward", quest.getReward());
             intent.putExtra("questDescription", quest.getQuestDescription());

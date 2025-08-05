@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.wktnirmal.myquest.Quest;
@@ -32,7 +33,7 @@ public class QuestLogFragment extends Fragment {
     FirebaseFirestore databaseQuests = FirebaseFirestore.getInstance();  //firestore initialization
     List<Quest> questList = new ArrayList<>();
     ProgressBar progressBar;
-    FirebaseAuth fAuth;
+    FirebaseUser user;
     TextView username;
     TextView levelCount;
     TextView xpCount;
@@ -65,7 +66,7 @@ public class QuestLogFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         //firebase connect
-        fAuth = FirebaseAuth.getInstance();
+        user = FirebaseAuth.getInstance().getCurrentUser();
 
         //connect the elements
         progressBar = view.findViewById(R.id.progressBar_questLog);
@@ -84,7 +85,7 @@ public class QuestLogFragment extends Fragment {
         if (recyclerView != null) {
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             // Fetch from Firestore
-            databaseQuests.collection("users").document(fAuth.getCurrentUser().getUid()).collection("Quests").whereEqualTo("questStatus", "1")
+            databaseQuests.collection("Users").document(user.getUid()).collection("Quests").whereEqualTo("questStatus", "1")
                     .get()
                     .addOnSuccessListener(queryDocumentSnapshots -> {
                         progressBar.setVisibility(View.GONE);
@@ -98,7 +99,7 @@ public class QuestLogFragment extends Fragment {
                         recyclerView.setAdapter(adapter);
                     });
             //update username, level and xp from the database
-            databaseQuests.collection("users").document(fAuth.getCurrentUser().getUid())
+            databaseQuests.collection("Users").document(user.getUid())
                     .get()
                     .addOnSuccessListener(queryDocumentSnapshots -> {
                         if (queryDocumentSnapshots != null) {

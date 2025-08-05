@@ -18,6 +18,9 @@
         android:theme="@style/Theme.MyQuest"
         tools:targetApi="31">
         <activity
+            android:name=".QuestLog.QuestCompletion"
+            android:exported="false" />
+        <activity
             android:name=".RegisterActivity"
             android:exported="false" />
         <activity

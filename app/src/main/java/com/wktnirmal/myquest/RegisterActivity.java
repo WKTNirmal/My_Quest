@@ -115,7 +115,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                             //add user data to the account data
                             userID = fAuth.getCurrentUser().getUid();
-                            DocumentReference documentReference = fStore.collection("users").document(userID);
+                            DocumentReference documentReference = fStore.collection("Users").document(userID);
                             Map<String, Object> user = new HashMap<>();
                             user.put("username", username);
                             user.put("email", email);

@@ -33,6 +33,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.wktnirmal.myquest.MainActivity;
 import com.wktnirmal.myquest.Quest;
@@ -61,7 +62,7 @@ public class CreateQuest extends AppCompatActivity implements OnMapReadyCallback
     List<Address> addressList;
     FusedLocationProviderClient fusedLocationClient;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
-    FirebaseAuth fAuth;
+    FirebaseUser user;
 
 
     @Override
@@ -89,7 +90,7 @@ public class CreateQuest extends AppCompatActivity implements OnMapReadyCallback
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         //firebase connect
-        fAuth = FirebaseAuth.getInstance();
+        user = FirebaseAuth.getInstance().getCurrentUser();
 
 
         updateLocationOnMinimap();
@@ -258,10 +259,10 @@ public class CreateQuest extends AppCompatActivity implements OnMapReadyCallback
             Quest newquest = new Quest(questTitleInput.getText().toString(), questDescriptionInput.getText().toString(), startLat, startLng, endLat, endLng, distance, "1", repetitive);
             Map<String, Object> Quest = new HashMap<>();
 
-            databaseQuests.collection("users").document(fAuth.getCurrentUser().getUid()).collection("Quests").add(newquest)
+            databaseQuests.collection("Users").document(user.getUid()).collection("Quests").add(newquest)
                     .addOnSuccessListener(docRef -> {
                         String questId = docRef.getId(); // Get the generated document ID
-                        databaseQuests.collection("users").document(fAuth.getCurrentUser().getUid()).collection("Quests").document(questId).update("id", questId);
+                        databaseQuests.collection("Users").document(user.getUid()).collection("Quests").document(questId).update("id", questId);
 
                         //navigate back to the quest log
                         Intent intent = new Intent(CreateQuest.this, MainActivity.class);

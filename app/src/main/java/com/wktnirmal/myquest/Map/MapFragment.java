@@ -26,6 +26,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.wktnirmal.myquest.R;
@@ -43,7 +44,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     GoogleMap gameMap;
     double liveLat;
     double liveLng;
-    FirebaseAuth fAuth;
+    FirebaseUser user;
 
 
 
@@ -110,7 +111,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState);
 
         //firebase connect
-        fAuth = FirebaseAuth.getInstance();
+        user = FirebaseAuth.getInstance().getCurrentUser();
 
         //update the map with marks
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map_internal_fragment);
@@ -158,7 +159,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
 
         //gets the quest locations from the database and add marks
-        databaseQuests.collection("users").document(fAuth.getCurrentUser().getUid()).collection("Quests")
+        databaseQuests.collection("Users").document(user.getUid()).collection("Quests")
                 .whereEqualTo("questStatus", "1")
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
