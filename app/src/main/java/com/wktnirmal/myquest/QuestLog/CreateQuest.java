@@ -23,8 +23,10 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.gms.location.CurrentLocationRequest;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.Priority;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -211,7 +213,14 @@ public class CreateQuest extends AppCompatActivity implements OnMapReadyCallback
         // Check for location permissions
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             // Permission is already granted, get the location
-            fusedLocationClient.getLastLocation()
+
+            CurrentLocationRequest.Builder requestBuilder = new CurrentLocationRequest.Builder();
+            requestBuilder.setPriority(Priority.PRIORITY_HIGH_ACCURACY);
+            requestBuilder.setMaxUpdateAgeMillis(5000); //5 seconds update time
+            requestBuilder.setMaxUpdateAgeMillis(5000); //accept cached location upto 5 seconds
+
+            CurrentLocationRequest currentLocationRequest = requestBuilder.build();
+            fusedLocationClient.getCurrentLocation(currentLocationRequest, null)
                     .addOnSuccessListener(location -> {
                         if (location != null) {
                             startLat = location.getLatitude();
