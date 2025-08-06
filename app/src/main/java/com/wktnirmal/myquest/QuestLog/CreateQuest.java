@@ -275,6 +275,7 @@ public class CreateQuest extends AppCompatActivity implements OnMapReadyCallback
 
                         //navigate back to the quest log
                         Intent intent = new Intent(CreateQuest.this, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //completely clear the nav stack
                         startActivity(intent);
                         finish();
                     })

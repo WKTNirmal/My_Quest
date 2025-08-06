@@ -100,6 +100,7 @@ public class QuestCompletion extends AppCompatActivity implements SensorEventLis
             isAccelerometerAvailable = false;
             Toast.makeText(this, "Can't detect motion", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(QuestCompletion.this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //completely clear the nav stack
             startActivity(intent);
             finish();
         }
@@ -219,6 +220,7 @@ public class QuestCompletion extends AppCompatActivity implements SensorEventLis
                                 .addOnSuccessListener(aVoid -> {
                                     Toast.makeText(this, "Quest completed", Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(QuestCompletion.this, MainActivity.class);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //completely clear the nav stack
                                     startActivity(intent);
                                     finish();
                                 })

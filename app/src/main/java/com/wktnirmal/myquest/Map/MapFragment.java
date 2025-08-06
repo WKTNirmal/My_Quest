@@ -92,7 +92,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
+//        fusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
 
 //        if (getArguments() != null) {
 //            mParam1 = getArguments().getString(ARG_PARAM1);
@@ -111,6 +111,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
 
         //firebase connect
         user = FirebaseAuth.getInstance().getCurrentUser();
