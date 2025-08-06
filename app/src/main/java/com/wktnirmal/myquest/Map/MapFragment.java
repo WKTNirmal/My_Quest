@@ -124,6 +124,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(@NonNull GoogleMap googleMap) {
         gameMap = googleMap;
         gameMap.clear(); // Clear previous markers
+        gameMap.getUiSettings().setZoomControlsEnabled(true);
 
         getUserLiveLocation();
 
@@ -190,8 +191,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
             CurrentLocationRequest.Builder requestBuilder = new CurrentLocationRequest.Builder();
             requestBuilder.setPriority(Priority.PRIORITY_HIGH_ACCURACY);
-            requestBuilder.setMaxUpdateAgeMillis(5000); //5 seconds update time
-            requestBuilder.setMaxUpdateAgeMillis(5000); //accept cached location upto 5 seconds
+            requestBuilder.setMaxUpdateAgeMillis(10000); //10 seconds update time
+            requestBuilder.setMaxUpdateAgeMillis(9000); //accept cached location upto 9 seconds
 
             CurrentLocationRequest currentLocationRequest = requestBuilder.build();
 
@@ -218,7 +219,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         gameMap.addMarker(new MarkerOptions().position(liveLocation).title("You").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
         gameMap.animateCamera(CameraUpdateFactory.newLatLngZoom(liveLocation,10.0f));
-        gameMap.getUiSettings().setZoomControlsEnabled(true);
+//        gameMap.getUiSettings().setZoomControlsEnabled(true);
     }
 
 }

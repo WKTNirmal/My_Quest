@@ -151,7 +151,7 @@ public class QuestCompletion extends AppCompatActivity implements SensorEventLis
             CurrentLocationRequest.Builder requestBuilder = new CurrentLocationRequest.Builder();
             requestBuilder.setPriority(Priority.PRIORITY_HIGH_ACCURACY);
             requestBuilder.setMaxUpdateAgeMillis(5000); //5 seconds update time
-            requestBuilder.setMaxUpdateAgeMillis(5000); //accept cached location upto 5 seconds
+            requestBuilder.setMaxUpdateAgeMillis(4000); //accept cached location upto 4 seconds
 
             CurrentLocationRequest currentLocationRequest = requestBuilder.build();
             fusedLocationClient.getCurrentLocation(currentLocationRequest, null)
@@ -160,6 +160,7 @@ public class QuestCompletion extends AppCompatActivity implements SensorEventLis
                             liveLat = location.getLatitude();
                             liveLng = location.getLongitude();
 
+                            //check if the user is close enough to the quest location
                             int liveLatRoundUp = (int) Math.round(liveLat*1000);
                             int liveLngRoundUp = (int) Math.round(liveLng*1000);
                             int endLatRoundUp = (int) Math.round(endLat*1000);

@@ -217,7 +217,7 @@ public class CreateQuest extends AppCompatActivity implements OnMapReadyCallback
             CurrentLocationRequest.Builder requestBuilder = new CurrentLocationRequest.Builder();
             requestBuilder.setPriority(Priority.PRIORITY_HIGH_ACCURACY);
             requestBuilder.setMaxUpdateAgeMillis(5000); //5 seconds update time
-            requestBuilder.setMaxUpdateAgeMillis(5000); //accept cached location upto 5 seconds
+            requestBuilder.setMaxUpdateAgeMillis(4000); //accept cached location upto 4 seconds
 
             CurrentLocationRequest currentLocationRequest = requestBuilder.build();
             fusedLocationClient.getCurrentLocation(currentLocationRequest, null)
