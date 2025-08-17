@@ -18,6 +18,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.wktnirmal.myquest.MainActivity;
@@ -96,7 +97,7 @@ public class ViewQuest extends AppCompatActivity implements OnMapReadyCallback {
 
         LatLng questLocation = new LatLng(endLat, endLng);
         previewMap.animateCamera(CameraUpdateFactory.newLatLngZoom(questLocation, 15.0f)); // Low zoom to show a large area
-        previewMap.addMarker(new MarkerOptions().position(questLocation).title("Quest Location"));
+        previewMap.addMarker(new MarkerOptions().position(questLocation).title("Quest Location").icon(BitmapDescriptorFactory.fromResource(R.drawable.quest_markeronmap)));
 
 
     }

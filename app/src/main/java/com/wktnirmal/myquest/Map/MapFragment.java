@@ -144,7 +144,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         String questTitle = doc.getString("questTitle");
 
                         LatLng questLocation = new LatLng(endLat, endLng);
-                        gameMap.addMarker(new MarkerOptions().position(questLocation).title(questTitle));
+                        gameMap.addMarker(new MarkerOptions().position(questLocation).title(questTitle).icon(BitmapDescriptorFactory.fromResource(R.drawable.quest_markeronmap)));
 //                        gameMap.animateCamera(CameraUpdateFactory.newLatLngZoom(questLocation,15.0f));
 //                        gameMap.getUiSettings().setZoomControlsEnabled(true);
 
@@ -195,7 +195,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private void addLiveLocationMarker() {
         LatLng liveLocation = new LatLng(liveLat, liveLng); // live location map view
 
-        gameMap.addMarker(new MarkerOptions().position(liveLocation).title("You").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+        gameMap.addMarker(new MarkerOptions().position(liveLocation).title("You").icon(BitmapDescriptorFactory.fromResource(R.drawable.user_location_icon)));
         gameMap.animateCamera(CameraUpdateFactory.newLatLngZoom(liveLocation,12.0f));
     }
 

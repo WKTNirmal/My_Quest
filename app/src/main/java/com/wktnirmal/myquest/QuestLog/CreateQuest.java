@@ -239,7 +239,7 @@ public class CreateQuest extends AppCompatActivity implements OnMapReadyCallback
 
                             //Set an initial location and zoom level for the map
                             LatLng initialLocation = new LatLng(startLat, startLng); // live location map view
-                            inputMap.addMarker(new MarkerOptions().position(initialLocation).title("You").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                            inputMap.addMarker(new MarkerOptions().position(initialLocation).title("You").icon(BitmapDescriptorFactory.fromResource(R.drawable.user_location_icon)));
 
                             if (endLat == 0.0 && endLng == 0.0) { //so the camera will only zoom at the live location only at first
                                 inputMap.animateCamera(CameraUpdateFactory.newLatLngZoom(initialLocation, 15.0f)); // Low zoom to show a large area
