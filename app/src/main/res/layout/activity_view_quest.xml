@@ -8,8 +8,8 @@
     tools:context=".QuestLog.ViewQuest">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -31,7 +31,7 @@
                 android:inputType="text"
                 android:padding="10dp"
                 android:textAlignment="center"
-                android:textSize="20sp"
+                android:textSize="24sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -40,6 +40,7 @@
                 android:layout_height="wrap_content"
                 android:padding="10dp"
                 android:text="Location :"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <androidx.fragment.app.FragmentContainerView
@@ -53,7 +54,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
-                android:text="Repititive Quest" />
+                android:text="Repititive Quest"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/textView4"
@@ -61,11 +63,12 @@
                 android:layout_height="wrap_content"
                 android:padding="10dp"
                 android:text="Additional data :"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:padding="10dp">
 
                 <LinearLayout
@@ -92,7 +95,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Reward :"
-                    android:textSize="16sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -102,7 +105,7 @@
                     android:layout_weight="1"
                     android:text="00"
                     android:textColor="#FF9800"
-                    android:textSize="16sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -110,19 +113,38 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="XP"
+                    android:text=" XP"
                     android:textColor="#FF9800"
-                    android:textSize="16sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
-            <Button
-                android:id="@+id/btn_completeQuest"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:padding="10dp"
-                android:text="Complete" />
+                android:layout_height="match_parent"
+                android:gravity="bottom"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_cancel"
+                    style="@style/Widget.Material3.Button.ElevatedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:layout_weight="1"
+                    android:padding="10dp"
+                    android:text="Cancel" />
+
+                <Button
+                    android:id="@+id/btn_completeQuest"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:layout_weight="1"
+                    android:padding="10dp"
+                    android:text="Complete" />
+
+            </LinearLayout>
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>

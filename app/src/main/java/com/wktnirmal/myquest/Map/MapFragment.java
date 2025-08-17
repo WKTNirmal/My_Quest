@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -15,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.location.CurrentLocationRequest;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -33,11 +35,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.wktnirmal.myquest.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link MapFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     FirebaseFirestore databaseQuests = FirebaseFirestore.getInstance();  //firestore initialization
@@ -47,43 +45,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     double liveLat;
     double liveLng;
     FirebaseUser user;
+    CardView cardView_loadingMSG;
 
 
 
-
-
-
-
-
-
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-//    private static final String ARG_PARAM1 = "param1";
-//    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-//    private String mParam1;
-//    private String mParam2;
 
     public MapFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MapFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static MapFragment newInstance(String param1, String param2) {
+
+    public static MapFragment newInstance() {
         MapFragment fragment = new MapFragment();
         Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -92,12 +67,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        fusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
-
-//        if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
-//        }
     }
 
     @Override
@@ -113,6 +82,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState);
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
+        cardView_loadingMSG = view.findViewById(R.id.cardView_loadingMsg);
 
         //firebase connect
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -208,6 +178,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
                             addLiveLocationMarker();
                         }
+                        cardView_loadingMSG.setVisibility(View.GONE);
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.e("Location", "Error getting location", e);
+                        cardView_loadingMSG.setVisibility(View.GONE);
+                        Toast.makeText(getContext(), "Error getting location", Toast.LENGTH_SHORT).show();
                     });
         } else {
             // Permission is not granted, request it
@@ -220,8 +196,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         LatLng liveLocation = new LatLng(liveLat, liveLng); // live location map view
 
         gameMap.addMarker(new MarkerOptions().position(liveLocation).title("You").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-        gameMap.animateCamera(CameraUpdateFactory.newLatLngZoom(liveLocation,10.0f));
-//        gameMap.getUiSettings().setZoomControlsEnabled(true);
+        gameMap.animateCamera(CameraUpdateFactory.newLatLngZoom(liveLocation,12.0f));
     }
 
 }

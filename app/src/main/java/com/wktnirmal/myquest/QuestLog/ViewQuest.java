@@ -32,7 +32,7 @@ public class ViewQuest extends AppCompatActivity implements OnMapReadyCallback {
     double endLat;
     double endLng;
     int repetitive;
-    Button completeQuestButton;
+    Button completeQuestButton, cancelButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +63,7 @@ public class ViewQuest extends AppCompatActivity implements OnMapReadyCallback {
         questDistanceText = findViewById(R.id.textView_rewardPreview);
         questDescriptionText = findViewById(R.id.textView_descriptionPreview);
         completeQuestButton = findViewById(R.id.btn_completeQuest);
+        cancelButton = findViewById(R.id.btn_cancel);
 
         questTitleText.setText(title);
         questDistanceText.setText(String.valueOf(reward));
@@ -77,6 +78,13 @@ public class ViewQuest extends AppCompatActivity implements OnMapReadyCallback {
                 intent.putExtra("endLat", endLat);
                 intent.putExtra("endLng", endLng);
                 startActivity(intent);
+            }
+        });
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
 

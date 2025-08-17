@@ -10,6 +10,7 @@
         android:id="@+id/backgrounImage"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:alpha="0.1"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,7 +23,6 @@
         android:id="@+id/Topbar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="#4C000000"
         app:cardCornerRadius="0dp"
         app:cardElevation="0dp"
         app:cardMaxElevation="0dp"
@@ -38,8 +38,8 @@
 
             <ImageButton
                 android:id="@+id/profile_pic"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:background="#00FFFFFF"
                 android:padding="10dp"
                 android:src="@drawable/baseline_account_circle_24" />
@@ -48,11 +48,12 @@
                 android:id="@+id/username"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:gravity="center"
-                android:text="User_name"
+                android:paddingLeft="5dp"
+                android:text="Loading..."
                 android:textAlignment="viewStart"
                 android:textAllCaps="false"
-                android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -62,9 +63,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="LEVEL "
+                android:text="LVL "
                 android:textAlignment="textEnd"
-                android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -75,9 +75,14 @@
                 android:gravity="center"
                 android:text="0"
                 android:textAlignment="center"
-                android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/imageView5"
+                android:layout_width="24dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/level_icon" />
 
             <TextView
                 android:id="@+id/xpCount"
@@ -87,7 +92,6 @@
                 android:gravity="center"
                 android:text="0"
                 android:textAlignment="textEnd"
-                android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -98,9 +102,14 @@
                 android:gravity="center"
                 android:text=" XP"
                 android:textAlignment="textEnd"
-                android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="24dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/xp_icon" />
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
@@ -123,19 +132,19 @@
         android:src="@drawable/baseline_add_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.83"
+        app:layout_constraintHorizontal_bias="0.954"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Topbar"
-        app:layout_constraintVertical_bias="0.908" />
+        app:layout_constraintVertical_bias="0.972" />
 
     <ProgressBar
         android:id="@+id/progressBar_questLog"
         style="?android:attr/progressBarStyle"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/questListRecyclerView"
-        app:layout_constraintStart_toStartOf="@+id/questListRecyclerView"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/questListRecyclerView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

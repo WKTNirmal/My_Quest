@@ -52,7 +52,7 @@ public class CreateQuest extends AppCompatActivity implements OnMapReadyCallback
     FirebaseFirestore databaseQuests = FirebaseFirestore.getInstance();  //firestore initialization
 
     GoogleMap inputMap;
-    Button submitNewQuestButton;
+    Button submitNewQuestButton, leaveButton;
     EditText questTitleInput, questLocationInput, questDescriptionInput;
     Switch repetitiveQuestSwitch;
     double startLat;
@@ -84,6 +84,7 @@ public class CreateQuest extends AppCompatActivity implements OnMapReadyCallback
 
         //connect button and text fields
         submitNewQuestButton = findViewById(R.id.btn_submitNewQuest);
+        leaveButton = findViewById(R.id.btn_goBack);
         questTitleInput = findViewById(R.id.questTitle);
         questLocationInput = findViewById(R.id.questLocationInput);
         questDescriptionInput = findViewById(R.id.questDescriptionScrollView);
@@ -98,6 +99,14 @@ public class CreateQuest extends AppCompatActivity implements OnMapReadyCallback
         updateLocationOnMinimap();
 
         submitNewQuest();
+
+        leaveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
 
     }
 
