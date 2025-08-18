@@ -131,7 +131,7 @@ public class CreateQuest extends AppCompatActivity implements OnMapReadyCallback
         submitNewQuestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!questTitleInput.equals("") && endLat != 0.0 && endLng != 0.0) {
+                if (!questTitleInput.getText().toString().isEmpty() && !questLocationInput.getText().toString().isEmpty()) {
                     //process the user input location and assign end lat,lng variables
                     getLocationData();
 
@@ -144,12 +144,16 @@ public class CreateQuest extends AppCompatActivity implements OnMapReadyCallback
                     //insert the data to the firebase
                     addDataToFirebase();
 
-//                    //navigate back to the quest log
-//                    Intent intent = new Intent(CreateQuest.this, MainActivity.class);
-//                    startActivity(intent);
-//                    finish();
+
                 }else{
-                    Toast.makeText(CreateQuest.this, "Please fill title and location", Toast.LENGTH_SHORT).show();
+                    if (questTitleInput.getText().toString().isEmpty()){
+                        questTitleInput.setError("Title is required");
+                    }
+                    if (questLocationInput.getText().toString().isEmpty()){
+                        questLocationInput.setError("Location is required");
+                    }
+
+                    //Toast.makeText(CreateQuest.this, "Please fill title and location", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -269,12 +273,12 @@ public class CreateQuest extends AppCompatActivity implements OnMapReadyCallback
     }
 
     public void addDataToFirebase(){
-        if (!questTitleInput.equals("") && endLat != 0.0 && endLng != 0.0) {
+        if (!questTitleInput.getText().toString().isEmpty() && !questLocationInput.getText().toString().isEmpty()) {
             if (repetitiveQuestSwitch.isChecked()) {
                 repetitive = "1";
             }
 
-            Quest newquest = new Quest(questTitleInput.getText().toString(), questDescriptionInput.getText().toString(), startLat, startLng, endLat, endLng, distance, "1", repetitive);
+            Quest newquest = new Quest(questTitleInput.getText().toString().trim(), questDescriptionInput.getText().toString().trim(), startLat, startLng, endLat, endLng, distance, "1", repetitive);
             Map<String, Object> Quest = new HashMap<>();
 
             databaseQuests.collection("Users").document(user.getUid()).collection("Quests").add(newquest)

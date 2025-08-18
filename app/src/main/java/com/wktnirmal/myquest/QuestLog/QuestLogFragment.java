@@ -104,7 +104,7 @@ public class QuestLogFragment extends Fragment {
                     .addOnSuccessListener(queryDocumentSnapshots -> {
                         if (queryDocumentSnapshots != null) {
                             UN = queryDocumentSnapshots.getString("username");
-                            userLevel = Math.toIntExact(queryDocumentSnapshots.getLong("userXpAmount"));
+                            userLevel = Math.toIntExact(queryDocumentSnapshots.getLong("userXpAmount")/1000);
                             Xp = Math.toIntExact(queryDocumentSnapshots.getLong("userXpAmount"));
                         }
                         //update the UI
@@ -115,9 +115,6 @@ public class QuestLogFragment extends Fragment {
 
 
 
-            // Example:
-            // QuestAdapter adapter = new QuestAdapter(questList);
-            // recyclerView.setAdapter(adapter);
         }
     }
 }

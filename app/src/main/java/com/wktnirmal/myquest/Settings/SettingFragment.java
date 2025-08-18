@@ -1,5 +1,6 @@
 package com.wktnirmal.myquest.Settings;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -59,16 +60,35 @@ public class SettingFragment extends Fragment {
         signOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(getActivity(), LoginActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //completely clear the nav stack
-                startActivity(intent);
-                getActivity().finish();
+                signOutTheUser();
+
             }
         });
 
     }
 
+    private void signOutTheUser() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Sign Out");
+        builder.setMessage("Are you sure you want to sign out?");
+        builder.setPositiveButton("Sign Out", (dialog, which) ->{
+
+            //sign out the user and navigate to the login activity
+            FirebaseAuth.getInstance().signOut();
+            Intent intent = new Intent(getActivity(), LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //completely clear the nav stack
+            startActivity(intent);
+            getActivity().finish();
+
+        });
+        builder.setNegativeButton("Cancel", (dialog, which) -> {
+                    dialog.dismiss();
+        }).show();
+
+
+
+
+    }
 
 
 }
