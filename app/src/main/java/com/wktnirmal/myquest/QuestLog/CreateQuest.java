@@ -49,7 +49,7 @@ import java.util.Map;
 
 public class CreateQuest extends AppCompatActivity implements OnMapReadyCallback {
 
-    FirebaseFirestore databaseQuests = FirebaseFirestore.getInstance();  //firestore initialization
+    FirebaseFirestore databaseQuests = FirebaseFirestore.getInstance();
 
     GoogleMap inputMap;
     Button submitNewQuestButton, leaveButton;

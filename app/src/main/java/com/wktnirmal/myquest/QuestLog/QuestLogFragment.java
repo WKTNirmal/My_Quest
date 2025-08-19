@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -40,6 +41,7 @@ public class QuestLogFragment extends Fragment {
     int Xp = 0;
     int userLevel = 0;
     String UN;
+    ExtendedFloatingActionButton toCreateQuestButton;
 
 
     @Override
@@ -50,7 +52,7 @@ public class QuestLogFragment extends Fragment {
         //return inflater.inflate(R.layout.fragment_quest_log, container, false);
 
         //handles the create quest button
-        FloatingActionButton toCreateQuestButton = view.findViewById(R.id.btn_toCreateQuest);
+        toCreateQuestButton = view.findViewById(R.id.btn_toCreateQuest);
         toCreateQuestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

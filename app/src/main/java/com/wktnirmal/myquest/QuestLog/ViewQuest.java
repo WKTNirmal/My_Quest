@@ -29,7 +29,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.wktnirmal.myquest.MainActivity;
 import com.wktnirmal.myquest.R;
 
-//TODO add the repititive ui function/ delete quest UI
 public class ViewQuest extends AppCompatActivity implements OnMapReadyCallback {
     GoogleMap previewMap;
     TextView questTitleText, questDistanceText, questDescriptionText;
