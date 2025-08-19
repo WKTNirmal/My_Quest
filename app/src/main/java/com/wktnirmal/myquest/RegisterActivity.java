@@ -23,6 +23,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,6 +39,7 @@ public class RegisterActivity extends AppCompatActivity {
     FirebaseFirestore fStore;
     ProgressBar progressBar;
     int userXpAmount = 0;
+    String email, username, password, confirmPassword;
 
 
     @Override
@@ -73,10 +75,10 @@ public class RegisterActivity extends AppCompatActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = registerEmail.getText().toString().trim();
-                String username = registerUsername.getText().toString().trim();
-                String password = registerPassword.getText().toString().trim();
-                String confirmPassword = registerConfirmPassword.getText().toString().trim();
+                email = registerEmail.getText().toString().trim();
+                username = registerUsername.getText().toString().trim();
+                password = registerPassword.getText().toString().trim();
+                confirmPassword = registerConfirmPassword.getText().toString().trim();
 
                 if (email.isEmpty()){
                     registerEmail.setError("Email is required");
@@ -106,44 +108,72 @@ public class RegisterActivity extends AppCompatActivity {
 
                 progressBar.setVisibility(View.VISIBLE);
 
-                //register the user
-                fAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()){
-                            //Toast.makeText(RegisterActivity.this, "User has been registered successfully", Toast.LENGTH_SHORT).show();
-
-                            //add user data to the account data
-                            userID = fAuth.getCurrentUser().getUid();
-                            DocumentReference documentReference = fStore.collection("Users").document(userID);
-                            Map<String, Object> user = new HashMap<>();
-                            user.put("username", username);
-                            user.put("email", email);
-                            user.put("userXpAmount", userXpAmount);
-                            documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void unused) {
-                                    Log.d("TAG", "onSuccess: user profile data added for " + userID);
-
-                                    //redirect to the login screen
-                                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                                    intent.putExtra("Account_Just_Registered", true);
-                                    startActivity(intent);
-                                    finish();
-                                }
-                            });
+                registerTheUser();
 
 
-
-                        }else{
-                            Toast.makeText(RegisterActivity.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                            progressBar.setVisibility(View.GONE);
-                        }
-                    }
-                });
             }
         });
 
 
+    }
+
+    private void registerTheUser() {
+        //check if the username already exists
+        fStore.collection("Users").whereEqualTo("username", username).get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()){
+                        if (!task.getResult().isEmpty()){
+                            registerUsername.setError("Username already exists");
+                            progressBar.setVisibility(View.INVISIBLE);
+                        } else{
+                            createTheNewUserAccount();
+                        }
+                    }else {
+                        // Error checking username
+                        Toast.makeText(RegisterActivity.this, "Error checking username: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        progressBar.setVisibility(View.GONE);
+                    }
+                });
+
+    }
+
+    private void createTheNewUserAccount() {
+        //create the new user account
+        fAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()){
+                    //Toast.makeText(RegisterActivity.this, "User has been registered successfully", Toast.LENGTH_SHORT).show();
+
+                    //add user data to the account data
+                    userID = fAuth.getCurrentUser().getUid();
+                    DocumentReference documentReference = fStore.collection("Users").document(userID);
+                    Map<String, Object> user = new HashMap<>();
+                    user.put("username", username);
+                    user.put("email", email);
+                    user.put("userXpAmount", userXpAmount);
+                    documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                            Log.d("TAG", "onSuccess: user profile data added for " + userID);
+
+                            //sign out the user so to log in again using the new account
+                            fAuth.getInstance().signOut();
+
+                            //redirect to the login screen
+                            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                            Toast.makeText(RegisterActivity.this, "Account created successfully. Please Log in", Toast.LENGTH_SHORT).show();
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //completely clear the nav stack
+                            startActivity(intent);
+                            finish();
+                        }
+                    });
+
+                }else{
+                    Toast.makeText(RegisterActivity.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 }

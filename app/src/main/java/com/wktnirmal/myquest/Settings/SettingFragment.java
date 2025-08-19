@@ -24,7 +24,7 @@ import com.wktnirmal.myquest.R;
 public class SettingFragment extends Fragment {
     FirebaseUser user;
     TextView username;
-    Button signOut;
+    Button accountSettings, about,signOut;
     FirebaseFirestore database;
 
 
@@ -45,9 +45,11 @@ public class SettingFragment extends Fragment {
 
         //connect elements
         username = view.findViewById(R.id.textView_Username);
+        accountSettings = view.findViewById(R.id.button);
+        about = view.findViewById(R.id.button2);
         signOut = view.findViewById(R.id.btn_signOut);
 
-        //update username
+        //display username
         database.collection("Users").document(user.getUid())
                         .get()
                         .addOnSuccessListener(queryDocumentSnapshots -> {
@@ -57,11 +59,35 @@ public class SettingFragment extends Fragment {
                                     }
                         });
 
+        //signout button
         signOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 signOutTheUser();
 
+            }
+        });
+
+        //goto account settings page
+        accountSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), AccountSettings.class);
+                startActivity(intent);
+            }
+        });
+
+        //show about
+        about.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("My Quest");
+                builder.setMessage("Created by WKT Nirmal, OUSL.\n" + "Email : wkthilinanirmal@gmail.com");
+                builder.setPositiveButton("OK", (dialog, which) -> {
+                   dialog.dismiss();
+                })
+                .show();
             }
         });
 
